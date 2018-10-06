@@ -77,7 +77,20 @@ public class Open_Addressing {
      */
     public int removeKey(int key) {
         //ADD YOUR CODE HERE (CHANGE THE RETURN STATEMENT)
-        return -1;
+        int slotsVisited = 0;
+        for(int i = 0; i < this.m; i++) {
+            int hashValue = this.probe(key, i);
+            if(this.Table[hashValue] != key) {
+                slotsVisited += 1;
+            }
+            else {
+                // removing key from hash table
+                this.Table[hashValue] = -1;
+                break;
+            }
+
+        }
+        return slotsVisited;
     }
 
 }
