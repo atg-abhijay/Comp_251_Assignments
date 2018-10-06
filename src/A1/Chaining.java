@@ -47,7 +47,11 @@ public class Chaining {
      */
     public int insertKey(int key) {
         //ADD YOUR CODE HERE (chane return statement)
-        return -1;
+        int hashValue = this.chain(key);
+        ArrayList<Integer> tableEntry = Table.get(hashValue);
+        int numCollisions = tableEntry.size();
+        tableEntry.add(key);
+        return numCollisions;
     }
 
 }
