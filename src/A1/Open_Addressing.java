@@ -57,7 +57,18 @@ public class Open_Addressing {
      */
     public int insertKey(int key) {
         //ADD YOUR CODE HERE (CHANGE THE RETURN STATEMENT)
-        return -1;
+        int numCollisions = 0;
+        for(int i=0; i < this.m; i++) {
+            int hashValue = this.probe(key, i);
+            if(this.Table[hashValue] != -1) {
+                numCollisions += 1;
+            }
+            else {
+                this.Table[hashValue] = key;
+                break;
+            }
+        }
+        return numCollisions;
     }
 
     /**
