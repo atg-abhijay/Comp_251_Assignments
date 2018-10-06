@@ -28,7 +28,10 @@ public class Chaining {
      */
     public int chain(int key) {
         //ADD YOUR CODE HERE (change return statement)
-        return -1;
+        int product = this.A * key;
+        int modValue = product % power2(this.w);
+        int hashValue = modValue >> (this.w - this.r);
+        return hashValue;
     }
 
     /**
