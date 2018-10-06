@@ -60,7 +60,7 @@ public class Open_Addressing {
         int numCollisions = 0;
         for(int i=0; i < this.m; i++) {
             int hashValue = this.probe(key, i);
-            if(this.Table[hashValue] != -1) {
+            if(!isSlotEmpty(hashValue)) {
                 numCollisions += 1;
             }
             else {
