@@ -124,6 +124,23 @@ public class main {
             205, 186, 107, 179};
 
         //ADD YOUR CODE HERE
+        Open_Addressing partTwoProbeTable = new Open_Addressing(w, 137);
+        for(int i = 0; i < 16; i++) {
+            partTwoProbeTable.insertKey(keysToInsert[i]);
+        }
+        for(int key: keysToRemove) {
+            int[] openAddressingTable = partTwoProbeTable.Table;
+            double index = 0;
+            for(int j = 0; j < openAddressingTable.length; j++) {
+                if(openAddressingTable[j] == key) {
+                    index = j;
+                    break;
+                }
+            }
+            double numCollisions = (double) partTwoProbeTable.removeKey(key);
+            removeCollisions.add(numCollisions);
+            removeIndex.add(index);
+        }
         generateCSVOutputFile("remove_collisions.csv", removeIndex, removeCollisions, removeCollisions);
 
         /*===========PART 3 : Experimenting with w===================*/
@@ -142,7 +159,7 @@ public class main {
         ArrayList<Double> avColListProbe2 = new ArrayList<Double>();
 
         //ADD YOUR CODE HERE
-        generateCSVOutputFile("w_comparison.csv", alphaList2, avColListChain2, avColListProbe2);
+        // generateCSVOutputFile("w_comparison.csv", alphaList2, avColListChain2, avColListProbe2);
 
     }
 
