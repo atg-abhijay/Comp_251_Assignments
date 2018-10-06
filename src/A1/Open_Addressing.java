@@ -30,7 +30,18 @@ public class Open_Addressing {
      */
     public int probe(int key, int i) {
         //ADD YOUR CODE HERE (CHANGE THE RETURN STATEMENT)
-        return -1;
+        // Implementing chain(int key)
+        // from the class Chaining here.
+        // It's variables will be prefixed
+        // with an 'h' for hashing function h(k).
+        int hProduct = this.A * key;
+        int hModValue = hProduct % power2(this.w);
+        int hHashValue = hModValue >> (this.w - this.r);
+
+        // Implementing g(k, i) now.
+        int gHashSumI = hHashValue + i;
+        int gHashValue = gHashSumI % power2(this.r);
+        return gHashValue;
     }
 
     /**
