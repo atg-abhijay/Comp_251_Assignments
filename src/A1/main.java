@@ -97,6 +97,17 @@ public class main {
                         The CSV file will output the result which you can visualize
              */
             //ADD YOUR CODE HERE
+            double numKeys = (double) n;
+            alphaList.add(numKeys/MyChainTable.m);
+            int avgChainCollisions = 0;
+            int avgProbeCollisions = 0;
+            for(int i = 0; i < n; i++) {
+                int key = keysToInsert[i];
+                avgChainCollisions += MyChainTable.insertKey(key);
+                avgProbeCollisions += MyProbeTable.insertKey(key);
+            }
+            avColListChain.add(avgChainCollisions/numKeys);
+            avColListProbe.add(avgProbeCollisions/numKeys);
         }
 
         generateCSVOutputFile("n_comparison.csv", alphaList, avColListChain, avColListProbe);
