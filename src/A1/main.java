@@ -134,7 +134,7 @@ public class main {
             removeCollisions.add(numCollisions);
             removeIndex.add((double) j);
         }
-        generateCSVOutputFile("remove_collisions.csv", removeIndex, removeCollisions, removeCollisions);
+//        generateCSVOutputFile("remove_collisions.csv", removeIndex, removeCollisions, removeCollisions);
 
         /*===========PART 3 : Experimenting with w===================*/
 
@@ -152,7 +152,57 @@ public class main {
         ArrayList<Double> avColListProbe2 = new ArrayList<Double>();
 
         //ADD YOUR CODE HERE
-        // generateCSVOutputFile("w_comparison.csv", alphaList2, avColListChain2, avColListProbe2);
+        int[] wList = {6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+        double numKeys = 32;
+        int numSimulations = 10;
+        for(int wVal: wList) {
+            // making new hash tables
+            // based on value of w
+            Chaining partThreeChainingTable = new Chaining(wVal, -1);
+            Open_Addressing partThreeOpenAddrTable = new Open_Addressing(wVal, -1);
+            int mValue = partThreeChainingTable.m;
+            alphaList2.add(numKeys/mValue);
+
+            // arraylists to keep track of
+            // averages over the 10 simulations
+            ArrayList<Double> avgChainingCollisions = new ArrayList<Double>();
+            ArrayList<Double> avgProbingCollisions = new ArrayList<Double>();
+
+
+            // running 10 simulations
+            // for each value of w
+            for(int i = 0; i < numSimulations; i++) {
+                double chainColl = 0;
+                double probingColl = 0;
+                ArrayList<Integer> partThreeKeysToInsert = new ArrayList<Integer>();
+                // generating 32 random keys
+                for(int j = 0; j < 32; j++) {
+                    int randomNumber = generateRandom(234, 2672, -1);
+                    if (!partThreeKeysToInsert.contains(randomNumber)) {
+                        partThreeKeysToInsert.add(randomNumber);
+                    }
+                }
+                for(int key: partThreeKeysToInsert) {
+                    chainColl += partThreeChainingTable.insertKey(key);
+                    probingColl += partThreeOpenAddrTable.insertKey(key);
+                }
+                avgChainingCollisions.add(chainColl/numKeys);
+                avgProbingCollisions.add(probingColl/numKeys);
+            }
+
+            double totalAvgChainColl = 0;
+            double totalAvgProbeColl = 0;
+            for(double avgChainColl: avgChainingCollisions) {
+                totalAvgChainColl += avgChainColl;
+            }
+            for(double avgProbeColl: avgProbingCollisions) {
+                totalAvgProbeColl += avgProbeColl;
+            }
+
+            avColListChain2.add(totalAvgChainColl/numSimulations);
+            avColListProbe2.add(totalAvgProbeColl/numSimulations);
+        }
+         generateCSVOutputFile("w_comparison.csv", alphaList2, avColListChain2, avColListProbe2);
 
     }
 
