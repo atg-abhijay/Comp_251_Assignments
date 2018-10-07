@@ -110,7 +110,7 @@ public class main {
             avColListProbe.add(avgProbeCollisions/numKeys);
         }
 
-        generateCSVOutputFile("n_comparison.csv", alphaList, avColListChain, avColListProbe);
+        // generateCSVOutputFile("n_comparison.csv", alphaList, avColListChain, avColListProbe);
 
         /*===========    PART 2 : Test removeKey  ===================*/
  /* In this exercise, you apply your removeKey method on an example.
@@ -128,18 +128,11 @@ public class main {
         for(int i = 0; i < 16; i++) {
             partTwoProbeTable.insertKey(keysToInsert[i]);
         }
-        for(int key: keysToRemove) {
-            int[] openAddressingTable = partTwoProbeTable.Table;
-            double index = 0;
-            for(int j = 0; j < openAddressingTable.length; j++) {
-                if(openAddressingTable[j] == key) {
-                    index = j;
-                    break;
-                }
-            }
+        for(int j = 0; j < keysToRemove.length; j++) {
+            int key = keysToRemove[j];
             double numCollisions = (double) partTwoProbeTable.removeKey(key);
             removeCollisions.add(numCollisions);
-            removeIndex.add(index);
+            removeIndex.add((double) j);
         }
         generateCSVOutputFile("remove_collisions.csv", removeIndex, removeCollisions, removeCollisions);
 
