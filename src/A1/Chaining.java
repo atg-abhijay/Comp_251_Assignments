@@ -47,6 +47,12 @@ public class Chaining {
      */
     public int insertKey(int key) {
         //ADD YOUR CODE HERE (chane return statement)
+        // calculate the hash value.
+        // get the corresponding entry in
+        // the table. check the size of the
+        // table (this will be the number of
+        // collisions). add the key to the
+        // end of the list.
         int hashValue = this.chain(key);
         ArrayList<Integer> tableEntry = this.Table.get(hashValue);
         int numCollisions = tableEntry.size();

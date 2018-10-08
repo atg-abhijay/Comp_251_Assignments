@@ -97,10 +97,17 @@ public class main {
                         The CSV file will output the result which you can visualize
              */
             //ADD YOUR CODE HERE
+            // using a double so that
+            // values don't get truncated
+            // upon division
             double numKeys = (double) n;
             alphaList.add(numKeys/MyChainTable.m);
             int avgChainCollisions = 0;
             int avgProbeCollisions = 0;
+            // inserting the key into both
+            // the hashtables and recording
+            // total number of collisions
+            // for each hashtable.
             for(int i = 0; i < n; i++) {
                 int key = keysToInsert[i];
                 avgChainCollisions += MyChainTable.insertKey(key);
@@ -110,7 +117,7 @@ public class main {
             avColListProbe.add(avgProbeCollisions/numKeys);
         }
 
-        // generateCSVOutputFile("n_comparison.csv", alphaList, avColListChain, avColListProbe);
+        generateCSVOutputFile("n_comparison.csv", alphaList, avColListChain, avColListProbe);
 
         /*===========    PART 2 : Test removeKey  ===================*/
  /* In this exercise, you apply your removeKey method on an example.
@@ -125,16 +132,21 @@ public class main {
 
         //ADD YOUR CODE HERE
         Open_Addressing partTwoProbeTable = new Open_Addressing(w, 137);
+        // inserting the keys
+        // into the probe table
         for(int i = 0; i < 16; i++) {
             partTwoProbeTable.insertKey(keysToInsert[i]);
         }
+        // removing the keys from the probe
+        // table and keeping track of number
+        // of collisions that occurred for each key.
         for(int j = 0; j < keysToRemove.length; j++) {
             int key = keysToRemove[j];
             double numCollisions = (double) partTwoProbeTable.removeKey(key);
             removeCollisions.add(numCollisions);
             removeIndex.add((double) j);
         }
-//        generateCSVOutputFile("remove_collisions.csv", removeIndex, removeCollisions, removeCollisions);
+        generateCSVOutputFile("remove_collisions.csv", removeIndex, removeCollisions, removeCollisions);
 
         /*===========PART 3 : Experimenting with w===================*/
 
@@ -152,7 +164,9 @@ public class main {
         ArrayList<Double> avColListProbe2 = new ArrayList<Double>();
 
         //ADD YOUR CODE HERE
+        // different w values to test against
         int[] wList = {6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+        // some fixed values
         double numKeys = 32;
         int numSimulations = 10;
         for(int wVal: wList) {
@@ -161,6 +175,7 @@ public class main {
             Chaining partThreeChainingTable = new Chaining(wVal, -1);
             Open_Addressing partThreeOpenAddrTable = new Open_Addressing(wVal, -1);
             int mValue = partThreeChainingTable.m;
+            // recording alpha value
             alphaList2.add(numKeys/mValue);
 
             // arraylists to keep track of
@@ -177,11 +192,18 @@ public class main {
                 ArrayList<Integer> partThreeKeysToInsert = new ArrayList<Integer>();
                 // generating 32 random keys
                 for(int j = 0; j < 32; j++) {
+                    // choosing arbitrary bounds for
+                    // the random number to be generated.
+                    // checking for duplicates while
+                    // inserting key into the table.
                     int randomNumber = generateRandom(234, 2672, -1);
                     if (!partThreeKeysToInsert.contains(randomNumber)) {
                         partThreeKeysToInsert.add(randomNumber);
                     }
                 }
+                // calculating collisions for
+                // the two tables upon insertion
+                // of all the keys.
                 for(int key: partThreeKeysToInsert) {
                     chainColl += partThreeChainingTable.insertKey(key);
                     probingColl += partThreeOpenAddrTable.insertKey(key);
@@ -190,6 +212,8 @@ public class main {
                 avgProbingCollisions.add(probingColl/numKeys);
             }
 
+            // finding average for specific
+            // value of w over the 10 simulations.
             double totalAvgChainColl = 0;
             double totalAvgProbeColl = 0;
             for(double avgChainColl: avgChainingCollisions) {

@@ -58,6 +58,10 @@ public class Open_Addressing {
     public int insertKey(int key) {
         //ADD YOUR CODE HERE (CHANGE THE RETURN STATEMENT)
         int numCollisions = 0;
+        // probe number goes from 0 to m-1.
+        // calculate the hash value.
+        // if the slot is empty, insert
+        // the key. else, increment numCollisions.
         for(int i=0; i < this.m; i++) {
             int hashValue = this.probe(key, i);
             if(!isSlotEmpty(hashValue)) {
@@ -78,6 +82,10 @@ public class Open_Addressing {
     public int removeKey(int key) {
         //ADD YOUR CODE HERE (CHANGE THE RETURN STATEMENT)
         int slotsVisited = 0;
+        // probe number goes from 0 to m-1.
+        // calculate the hash value.
+        // if slot contains key to be removed,
+        // remove the key. else, increment slotsVisited.
         for(int i = 0; i < this.m; i++) {
             int hashValue = this.probe(key, i);
             if(this.Table[hashValue] != key) {
