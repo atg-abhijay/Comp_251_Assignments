@@ -67,10 +67,29 @@ public class DisjointSets {
 
     /* merge sets containing elements i and j */
     public int union(int i, int j) {
-
+        int rep_i = find(i);
+        int rep_j = find(j);
+        if(rep_i == rep_j) {
+            return rep_i;
+        }
+        else{
+            int rank_rep_i = this.rank[rep_i];
+            int rank_rep_j = this.rank[rep_j];
+            if(rank_rep_i < rank_rep_j) {
+                this.par[rep_i] = rep_j;
+                return rep_j;
+            }
+            else if(rank_rep_i > rank_rep_j) {
+                this.par[rep_j] = rep_i;
+                return rep_i;
+            }
+            else {
+                this.par[rep_i] = rep_j;
+                this.rank[rep_j] += 1;
+                return rep_j;
+            }
+        }
         /* Fill this method (The statement return 0 is here only to compile) */
-        return 0;
-
     }
 
     public static void main(String[] args) {
