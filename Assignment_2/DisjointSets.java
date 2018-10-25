@@ -16,7 +16,7 @@ public class DisjointSets {
 
     private int[] par;
     private int[] rank;
-    
+
     /* contructor: creates a partition of n elements. */
     /* Each element is in a separate disjoint set */
     DisjointSets(int n) {
@@ -28,7 +28,7 @@ public class DisjointSets {
             }
         }
     }
-    
+
     public String toString(){
         int pari,countsets=0;
         String output = "";
@@ -52,25 +52,28 @@ public class DisjointSets {
         }
         return output;
     }
-    
+
     /* find resentative of element i */
     public int find(int i) {
-
+        if(this.par[i] == i) {
+            return i;
+        }
+        else{
+            return find(this.par[i]);
+        }
         /* Fill this method (The statement return 0 is here only to compile) */
-        return 0;
-        
     }
 
     /* merge sets containing elements i and j */
     public int union(int i, int j) {
-    
+
         /* Fill this method (The statement return 0 is here only to compile) */
         return 0;
-        
+
     }
-    
+
     public static void main(String[] args) {
-        
+
         DisjointSets myset = new DisjointSets(6);
         System.out.println(myset);
         System.out.println("-> Union 2 and 3");
@@ -91,7 +94,7 @@ public class DisjointSets {
         System.out.println("-> Union 2 and 4");
         myset.union(2,4);
         System.out.println(myset);
-        
+
     }
 
 }
