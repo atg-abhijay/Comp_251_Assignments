@@ -59,7 +59,8 @@ public class DisjointSets {
             return i;
         }
         else{
-            return find(this.par[i]);
+            this.par[i] = find(this.par[i]);
+            return this.par[i];
         }
         /* Fill this method (The statement return 0 is here only to compile) */
     }
