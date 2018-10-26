@@ -79,8 +79,40 @@ public class HW_Sched {
 		//Initializes the homeworkPlan, which you must fill out and output
 		int[] homeworkPlan = new int[Assignments.size()];
 		//YOUR CODE GOES HERE
+		Assignments.forEach(a->System.out.println(a.weight));
+		System.out.println();
+		int[] shiftedDeadlines = new int[this.m];
+		for(int i = 0; i < this.m; i++) {
+			shiftedDeadlines[i] = Assignments.get(i).deadline;
+		}
 
+		int currentDeadline = this.lastDeadline;
 
+		while(currentDeadline > 0) {
+			System.out.println("Current Deadline: " + currentDeadline);
+			// ArrayList<Assignment> assWithSpDeadline = new ArrayList<Assignment>();
+			Assignment highestWtAssignment = new Assignment();
+			int highestWt = 0;
+			for(int i = 0; i < this.m; i++) {
+				if(shiftedDeadlines[i] == currentDeadline) {
+					if(Assignments.get(i).weight > highestWt) {
+						highestWtAssignment = Assignments.get(i);
+						highestWt = Assignments.get(i).weight;
+					}
+				}
+			}
+
+			System.out.println(highestWtAssignment.number + ", " + highestWtAssignment.weight + ", " + highestWtAssignment.deadline + ", " + currentDeadline);
+			homeworkPlan[highestWtAssignment.number] = currentDeadline;
+			for(int i = 0; i < this.m; i++) {
+				if(shiftedDeadlines[i] == currentDeadline) {
+					if(i != highestWtAssignment.number) {
+						shiftedDeadlines[i] -=1;
+					}
+				}
+			}
+			currentDeadline -= 1;
+		}
 		return homeworkPlan;
 	}
 }
