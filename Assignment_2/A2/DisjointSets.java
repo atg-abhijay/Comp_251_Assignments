@@ -55,9 +55,17 @@ public class DisjointSets {
 
     /* find resentative of element i */
     public int find(int i) {
+        /**
+         * if i is its own parent,
+         * then it is the representative
+         */
         if(this.par[i] == i) {
             return i;
         }
+        /**
+         * recursively find the representative
+         * of the parent of i
+         */
         else{
             this.par[i] = find(this.par[i]);
             return this.par[i];
@@ -67,12 +75,29 @@ public class DisjointSets {
 
     /* merge sets containing elements i and j */
     public int union(int i, int j) {
+        /**
+         * storing representatives (reps)
+         * of the elements i and j
+         */
         int rep_i = find(i);
         int rep_j = find(j);
+        /**
+         * if their reps match, then they
+         * belong to the same disjoint set.
+         * return either of the reps
+         */
         if(rep_i == rep_j) {
             return rep_i;
         }
         else{
+            /**
+             * obtain ranks of the reps.
+             * the tree with smaller rank
+             * is merged into the tree with
+             * larger rank. if their ranks
+             * are the same, merge tree containing
+             * i into tree containing j
+             */
             int rank_rep_i = this.rank[rep_i];
             int rank_rep_j = this.rank[rep_j];
             if(rank_rep_i < rank_rep_j) {
