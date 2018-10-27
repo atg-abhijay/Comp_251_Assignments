@@ -28,6 +28,18 @@ class Assignment implements Comparator<Assignment>{
 	@Override
 	public int compare(Assignment a1, Assignment a2) {
 		//YOUR CODE GOES HERE, DONT FORGET TO EDIT THE RETURN STATEMENT
+		/**
+		 * when compare() is called by Collections.sort(),
+		 * I wish to sort in the following way - sort the
+		 * assignments in decreasing order of their deadlines
+		 * i.e. the assignment with the latest deadline comes
+		 * before assignments with earlier deadlines. in case
+		 * of a tie over the deadline, the assignment with higher
+		 * weight appears before the assignment with lower weight.
+		 *
+		 * if the weights are tied as well, then the assignments
+		 * are equivalent.
+		 */
 		if(a1.deadline > a2.deadline) {
 			return -1;
 		}
@@ -81,11 +93,24 @@ public class HW_Sched {
 		//YOUR CODE GOES HERE
 		Assignments.forEach(a->System.out.println(a.weight));
 		System.out.println();
+		/**
+		 * creating an array which will keep track
+		 * of the deadlines of the assignments since
+		 * I intend to shift those deadlines (cannot
+		 * modify the deadline value of the Assignment
+		 * object itself). copy the initial deadlines
+		 * into the array.
+		 */
 		int[] shiftedDeadlines = new int[this.m];
 		for(int i = 0; i < this.m; i++) {
 			shiftedDeadlines[i] = Assignments.get(i).deadline;
 		}
 
+		/**
+		 * keeps track of the deadline being
+		 * tracked currently. starts from the
+		 * last deadline.
+		 */
 		int currentDeadline = this.lastDeadline;
 
 		while(currentDeadline > 0) {
@@ -93,8 +118,20 @@ public class HW_Sched {
 			// ArrayList<Assignment> assWithSpDeadline = new ArrayList<Assignment>();
 			Assignment highestWtAssignment = new Assignment();
 			int highestWt = 0;
+			/**
+			 * keeps track of the index of the
+			 * assignment with the highest weight
+			 * amongst the sorted assignments.
+			 */
 			int indexWithHighest = 0;
 			for(int i = 0; i < this.m; i++) {
+				/**
+				 * iterate over all those assignments
+				 * whose deadline (dl) matches the current
+				 * dl. amongst those, find the one with the
+				 * highest weight and store its details in the
+				 * different variables instantiated above.
+				 */
 				if(shiftedDeadlines[i] == currentDeadline) {
 					if(Assignments.get(i).weight > highestWt) {
 						highestWtAssignment = Assignments.get(i);
@@ -105,7 +142,24 @@ public class HW_Sched {
 			}
 
 			System.out.println(highestWtAssignment.number + ", " + highestWtAssignment.weight + ", " + highestWtAssignment.deadline + ", " + currentDeadline);
+			/**
+			 * after finding the assignment with the highest
+			 * weight amongst those with the same current dl,
+			 * put it in the time slot starting from the LAST
+			 * time slot available, i.e. the 1st assignment
+			 * found with this procedure will be done in the
+			 * last time slot, the 2nd one will be done in the second
+			 * last time slot and so on.
+			 */
 			homeworkPlan[highestWtAssignment.number] = currentDeadline;
+			/**
+			 * for those assignments which possessed the current dl
+			 * (except the highest weight assignment), decrease their
+			 * deadlines by one. since they weren't chosen in this
+			 * iteration, they may be chosen in the next, so we decrease
+			 * their deadline so that they may be considered in the
+			 * computation of the next iteration.
+			 */
 			for(int i = 0; i < this.m; i++) {
 				if(shiftedDeadlines[i] == currentDeadline) {
 					if(i != indexWithHighest) {
@@ -113,6 +167,10 @@ public class HW_Sched {
 					}
 				}
 			}
+			/**
+			 * decrement the deadline and progress
+			 * towards the earlier assignments.
+			 */
 			currentDeadline -= 1;
 		}
 		return homeworkPlan;
