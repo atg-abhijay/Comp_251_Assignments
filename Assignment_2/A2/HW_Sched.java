@@ -91,8 +91,6 @@ public class HW_Sched {
 		//Initializes the homeworkPlan, which you must fill out and output
 		int[] homeworkPlan = new int[Assignments.size()];
 		//YOUR CODE GOES HERE
-		Assignments.forEach(a->System.out.println(a.weight));
-		System.out.println();
 		/**
 		 * creating an array which will keep track
 		 * of the deadlines of the assignments since
@@ -112,10 +110,7 @@ public class HW_Sched {
 		 * last deadline.
 		 */
 		int currentDeadline = this.lastDeadline;
-
 		while(currentDeadline > 0) {
-			System.out.println("Current Deadline: " + currentDeadline);
-			// ArrayList<Assignment> assWithSpDeadline = new ArrayList<Assignment>();
 			Assignment highestWtAssignment = new Assignment();
 			int highestWt = 0;
 			/**
@@ -141,7 +136,6 @@ public class HW_Sched {
 				}
 			}
 
-			System.out.println(highestWtAssignment.number + ", " + highestWtAssignment.weight + ", " + highestWtAssignment.deadline + ", " + currentDeadline);
 			/**
 			 * after finding the assignment with the highest
 			 * weight amongst those with the same current dl,
