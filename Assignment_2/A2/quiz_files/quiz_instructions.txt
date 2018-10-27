@@ -1,0 +1,53 @@
+Instructions for quiz:
+
+(For q1, calculated the weight
+of the tree by hand)
+
+1. Get the file g2.txt from the quiz.
+
+2. Calculate its mst by running -
+        java A2.Kruskal g2.txt
+
+    To save it's output to a file -
+        java A2.Kruskal g2.txt | tail -n +2 > mst2.txt
+
+    'tail -n +2' removes the first line of the
+    file containing the number of nodes.
+
+3. Go to g2.txt. Remove the edges one by one.
+    Pay attention if the number of nodes changes
+    after deleting the edge. If it changes, change
+    the no. of nodes at the top of the file.
+
+4. For this graph g2 with a removed edge selected
+    from its MST, run -
+        java A2.Kruskal g2.txt | tail -n +2 > removei.txt
+
+    The 'i' denotes which edge (line number) from the
+    mst2.txt file has been removed in g2.txt. (Having the
+    number of nodes interferes with calculating the weight in 5.)
+
+5. Run -
+        python3 eval.py removei.txt >> removei.txt
+
+    This finds the weight of the MST for the MST
+    found for (g2 - the edge at line number i in mst2.txt)
+    and appends that weight to the file itself.
+
+6. After running this for removing all edges from mst2.txt,
+    run -
+        tail -n 1 remove*
+
+    This returns the last line in all the files remove*. From
+    this, we can find the MST with the least weight. Suppose it
+    is in removej.txt. Go to mst2.txt. The edge at line number j
+    has to be removed.
+
+7. To see the difference in the edges between the original MST
+    and this MST obtained after removing an edge, run -
+        diff removej.txt mst2.txt
+
+    This will give the new edge present in the MST for (g2 - edge j).
+
+8. To see the weight of the MST for (g2 - edge j), look at the end
+    of the file removej.txt.
