@@ -1,12 +1,11 @@
 Instructions for quiz:
 
-(For q1, calculated the weight
-of the tree by hand)
-
 1. Get the file g2.txt from the quiz.
 
-2. Calculate its mst by running -
+2. Calculate its MST by running -
         java A2.Kruskal g2.txt
+
+    Calculate the weight of the MST by hand.
 
     To save it's output to a file -
         java A2.Kruskal g2.txt | tail -n +2 > mst2.txt
