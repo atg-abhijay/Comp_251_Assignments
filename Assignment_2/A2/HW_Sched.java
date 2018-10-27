@@ -93,11 +93,13 @@ public class HW_Sched {
 			// ArrayList<Assignment> assWithSpDeadline = new ArrayList<Assignment>();
 			Assignment highestWtAssignment = new Assignment();
 			int highestWt = 0;
+			int indexWithHighest = 0;
 			for(int i = 0; i < this.m; i++) {
 				if(shiftedDeadlines[i] == currentDeadline) {
 					if(Assignments.get(i).weight > highestWt) {
 						highestWtAssignment = Assignments.get(i);
 						highestWt = Assignments.get(i).weight;
+						indexWithHighest = i;
 					}
 				}
 			}
@@ -106,7 +108,7 @@ public class HW_Sched {
 			homeworkPlan[highestWtAssignment.number] = currentDeadline;
 			for(int i = 0; i < this.m; i++) {
 				if(shiftedDeadlines[i] == currentDeadline) {
-					if(i != highestWtAssignment.number) {
+					if(i != indexWithHighest) {
 						shiftedDeadlines[i] -=1;
 					}
 				}
