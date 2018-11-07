@@ -18,7 +18,6 @@ public class FordFulkerson {
 
 		for(Edge e: graph.getEdges()) {
 			if(e.nodes[0] == source && e.weight < 0) {
-				// Stack.add(-1);
 				continue;
 			}
 
@@ -28,19 +27,13 @@ public class FordFulkerson {
 						graph.setEdge(h.nodes[0], e.nodes[1], -1);
 					}
 				}
-				// graph.setEdge(source, e.nodes[1], -1);
+
 				ArrayList<Integer> pathAhead = pathDFS(e.nodes[1], destination, graph);
 				if(!pathAhead.isEmpty()) {
 					Stack.add(source);
 					Stack.addAll(pathAhead);
 					break;
 				}
-				// ArrayList<Integer> pathAhead = pathDFS(e.nodes[1], destination, graph);
-				// if(!pathAhead.contains(-1)) {
-				// 	Stack.add(source);
-				// 	Stack.addAll(pathAhead);
-				// 	break;
-				// }
 			}
 		}
 		return Stack;
