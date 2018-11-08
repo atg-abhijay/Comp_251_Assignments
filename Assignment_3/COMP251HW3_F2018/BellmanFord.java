@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class BellmanFord{
 
 
@@ -66,7 +68,7 @@ public class BellmanFord{
          * all distances from source
          * are set to the final largeValue.
          * distance of source from source is zero.
-         * all predecessors are set to null.
+         * all predecessors are set to -1.
          */
         final int largeValue = Integer.MAX_VALUE;
         int graphNumNodes = g.getNbNodes();
@@ -76,9 +78,9 @@ public class BellmanFord{
 
         for(int i = 0; i < graphNumNodes; i++) {
             this.distances[i] = largeValue;
-            this.predecessors[i] = null;
+            this.predecessors[i] = -1;
         }
-        this.distances[source] = 0;
+        this.distances[this.source] = 0;
 
         /**
          * relax the edges for (graphNumNodes-1)
@@ -132,7 +134,30 @@ public class BellmanFord{
 
         /* YOUR CODE GOES HERE (update the return statement as well!) */
 
-        return null;
+        Stack<Integer> path = new Stack<Integer>();
+        int nodeToVisit = destination;
+        path.push(destination);
+        boolean stop = false;
+        while(!stop) {
+            nodeToVisit = predecessors[nodeToVisit];
+            if(predecessors[nodeToVisit] == -1) {
+                stop = True;
+            }
+            path.push(nodeToVisit);
+        }
+
+        int[] pathToReturn = new int[path.size()];
+        if(path.peek() == this.source) {
+            for(int i = 0; i < path.size(); i++) {
+                pathToReturn[i] = path.pop();
+            }
+        }
+
+        else {
+            throw new PathDoesNotExistException("There is no path between the source and destination!");
+        }
+
+        return pathToReturn;
     }
 
     public void printPath(int destination){
