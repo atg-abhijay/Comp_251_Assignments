@@ -62,12 +62,7 @@ public class FordFulkerson {
 		}
 
 		ArrayList<Integer> stPath = pathDFS(source, destination, new WGraph(residualGraph));
-		int count = 1;
 		while(!stPath.isEmpty()) {
-			// System.out.println("Count: " + count);
-			count += 1;
-			stPath.forEach(node->System.out.print(node + " "));
-			System.out.println();
 			/**
 			 * find the bottleneck
 			 * along the s-t path
@@ -76,22 +71,7 @@ public class FordFulkerson {
 			for(int i = 0; i < stPath.size()-1; i++) {
 				int startNode = stPath.get(i);
 				int endNode = stPath.get(i+1);
-				// Edge pathEdge = graph.getEdge(startNode, endNode);
-				// int pathEdgeCap = 0;
 				int pathEdgeCap = residualGraph.getEdge(startNode, endNode).weight;
-				// if(pathEdge != null) {
-				// 	// Edge capacityEdge = graph.getEdge(startNode, endNode);
-				// 	// Edge flowEdge = residualGraph.getEdge(endNode, startNode);
-				// 	// pathEdgeCap = capacityEdge.weight - flowEdge.weight;
-				// 	pathEdgeCap = residualGraph.getEdge(startNode, endNode).weight;
-				// }
-				// else {
-				// 	// Edge capacityEdge = graph.getEdge(endNode, startNode);
-				// 	// Edge flowEdge = residualGraph.getEdge(startNode, endNode);
-				// 	// pathEdgeCap = capacityEdge.weight - flowEdge.weight;
-				// 	pathEdgeCap = residualGraph.getEdge(endNode, startNode).weight;
-				// }
-
 				if(pathEdgeCap < bottleneck) {
 					bottleneck = pathEdgeCap;
 				}
@@ -112,26 +92,10 @@ public class FordFulkerson {
 			for(int i = 0; i < stPath.size()-1; i++) {
 				int startNode = stPath.get(i);
 				int endNode = stPath.get(i+1);
-				// Edge pathEdge = graph.getEdge(startNode, endNode);
-
-				// /**
-				//  * forward edge
-				//  */
-				// if(pathEdge != null) {
 				residualGraph.setEdge(startNode, endNode,
 					residualGraph.getEdge(startNode, endNode).weight - bottleneck);
 				residualGraph.setEdge(endNode, startNode,
 					residualGraph.getEdge(endNode, startNode).weight + bottleneck);
-				// }
-				/**
-				 * backward edge
-				 */
-				// else {
-				// 	residualGraph.setEdge(endNode, startNode,
-				// 		residualGraph.getEdge(endNode, startNode).weight - bottleneck);
-				// 	residualGraph.setEdge(startNode, endNode,
-				// 		residualGraph.getEdge(startNode, endNode).weight + bottleneck);
-				// }
 			}
 
 			stPath = pathDFS(source, destination, new WGraph(residualGraph));
