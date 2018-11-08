@@ -43,19 +43,91 @@ public class FordFulkerson {
 
 	public static void fordfulkerson(Integer source, Integer destination, WGraph graph, String filePath){
 		String answer="";
-		String myMcGillID = "26000000"; //Please initialize this variable with your McGill ID
+		String myMcGillID = "260708548"; //Please initialize this variable with your McGill ID
 		int maxFlow = 0;
 
-				/* YOUR CODE GOES HERE
-		//
-		//
-		//
-		//
-		//
-		//
-		//
-		*/
+				/* YOUR CODE GOES HERE */
+		/**
+		 * the residual graph will be the same
+		 * as the original graph at the beginning
+		 * and it will have backward edges with
+		 * weights zero for all its original corresponding edges
+		 */
+		WGraph residualGraph = new WGraph(graph);
 
+		for(Edge e: graph.getEdges()) {
+			Edge backwardEdge = new Edge(e.nodes[1], e.nodes[0], 0);
+			residualGraph.addEdge(backwardEdge);
+		}
+
+		ArrayList<Integer> stPath = pathDFS(source, destination, new WGraph(residualGraph));
+		int count = 1;
+		while(!stPath.isEmpty()) {
+			System.out.println("Count: " + count);
+			count += 1;
+			stPath.forEach(node->System.out.println(node + " "));
+			System.out.println();
+			/**
+			 * find the bottleneck
+			 * along the s-t path
+			 */
+			Integer bottleneck = Integer.MAX_VALUE;
+			for(int i = 0; i < stPath.size()-1; i++) {
+				int startNode = stPath.get(i);
+				int endNode = stPath.get(i+1);
+				Edge capacityEdge = graph.getEdge(startNode, endNode);
+				Edge flowEdge = residualGraph.getEdge(endNode, startNode);
+				int forwardEdgeFlow = capacityEdge.weight - flowEdge.weight;
+				if(forwardEdgeFlow < bottleneck) {
+					bottleneck = forwardEdgeFlow;
+				}
+			}
+
+			System.out.println("Bottleneck: " + bottleneck);
+
+			/**
+			 * update the maxFlow value
+			 * by the bottleneck
+			 */
+			maxFlow += bottleneck;
+
+			/**
+			 * augment the s-t path and update
+			 * the residual graph based on the new flow
+			 */
+			for(int i = 0; i < stPath.size()-1; i++) {
+				int startNode = stPath.get(i);
+				int endNode = stPath.get(i+1);
+				Edge pathEdge = graph.getEdge(startNode, endNode);
+				/**
+				 * forward edge
+				 */
+				if(pathEdge != null) {
+					residualGraph.setEdge(startNode, endNode,
+						residualGraph.getEdge(startNode, endNode).weight - bottleneck);
+				}
+				/**
+				 * backward edge
+				 */
+				else {
+					residualGraph.setEdge(endNode, startNode,
+						residualGraph.getEdge(endNode, startNode).weight + bottleneck);
+				}
+			}
+
+			stPath = pathDFS(source, destination, new WGraph(residualGraph));
+		}
+
+		/**
+		 * update the original graph
+		 * with the final flow values
+		 */
+		for(Edge originalEdge: graph.getEdges()) {
+			int startNode = originalEdge.nodes[0];
+			int endNode = originalEdge.nodes[1];
+			int residualEdgeWeight = residualGraph.getEdge(startNode, endNode).weight;
+			graph.setEdge(startNode, endNode, residualEdgeWeight);
+		}
 
 		answer += maxFlow + "\n" + graph.toString();
 		writeAnswer(filePath+myMcGillID+".txt",answer);
