@@ -1,6 +1,6 @@
 public class BellmanFord{
 
-	
+
 	/**
 	 * Utility class. Don't use.
 	 */
@@ -11,11 +11,11 @@ public class BellmanFord{
 			super(message);
 		}
 	}
-	
+
 	/**
 	 * Custom exception class for BellmanFord algorithm
-	 * 
-	 * Use this to specify a negative cycle has been found 
+	 *
+	 * Use this to specify a negative cycle has been found
 	 */
 	public class NegativeWeightException extends BellmanFordException{
 		private static final long serialVersionUID = -7144618211100573822L;
@@ -24,7 +24,7 @@ public class BellmanFord{
 			super(message);
 		}
 	}
-	
+
 	/**
 	 * Custom exception class for BellmanFord algorithm
 	 *
@@ -32,12 +32,12 @@ public class BellmanFord{
 	 */
 	public class PathDoesNotExistException extends BellmanFordException{
 		private static final long serialVersionUID = 547323414762935276L;
-		public PathDoesNotExistException() { super();} 
+		public PathDoesNotExistException() { super();}
 		public PathDoesNotExistException(String message) {
 			super(message);
 		}
 	}
-	
+
     private int[] distances = null;
     private int[] predecessors = null;
     private int source;
@@ -45,7 +45,7 @@ public class BellmanFord{
     BellmanFord(WGraph g, int source) throws BellmanFordException{
         /* Constructor, input a graph and a source
          * Computes the Bellman Ford algorithm to populate the
-         * attributes 
+         * attributes
          *  distances - at position "n" the distance of node "n" to the source is kept
          *  predecessors - at position "n" the predecessor of node "n" on the path
          *                 to the source is kept
@@ -53,28 +53,74 @@ public class BellmanFord{
          *
          *  If the node is not reachable from the source, the
          *  distance value must be Integer.MAX_VALUE
-         *  
+         *
          *  When throwing an exception, choose an appropriate one from the ones given above
          */
-        
+
         /* YOUR CODE GOES HERE */
+
+        /**
+         * initialization of the distances and
+         * predecessors arrays.
+         *
+         * all distances from source
+         * are set to the final largeValue.
+         * distance of source from source is zero.
+         * all predecessors are set to null.
+         */
+        final int largeValue = Integer.MAX_VALUE;
+        int graphNumNodes = g.getNbNodes();
+        this.distances = new int[graphNumNodes];
+        this.predecessors = new int[graphNumNodes];
+        this.source = source;
+
+        for(int i = 0; i < graphNumNodes; i++) {
+            this.distances[i] = largeValue;
+            this.predecessors[i] = null;
+        }
+        this.distances[source] = 0;
+
+        for(int i = 1; i < graphNumNodes; i++) {
+            for(Edge e: g.getEdges()) {
+                this.relaxEdge(e);
+            }
+        }
+
+        for(Edge e: g.getEdges()) {
+            int startVertex = e.nodes[0];
+            int endVertex = e.nodes[1];
+            if(this.distances[endVertex] > this.distances[startVertex] + e.weight) {
+                throw new NegativeWeightException("A negative-weight cycle has been detected!");
+            }
+        }
+
+
+    }
+
+    private void relaxEdge(Edge e) {
+        int startVertex = e.nodes[0];
+        int endVertex = e.nodes[1];
+        if(this.distances[endVertex] > this.distances[startVertex] + e.weight) {
+            this.distances[endVertex] = this.distances[startVertex] + e.weight;
+            this.predecessors[endVertex] = startVertex;
+        }
     }
 
     public int[] shortestPath(int destination) throws BellmanFordException{
-        /*Returns the list of nodes along the shortest path from 
+        /*Returns the list of nodes along the shortest path from
          * the object source to the input destination
          * If not path exists an Exception is thrown
-         * Choose appropriate Exception from the ones given 
+         * Choose appropriate Exception from the ones given
          */
 
         /* YOUR CODE GOES HERE (update the return statement as well!) */
-        
+
         return null;
     }
 
     public void printPath(int destination){
         /*Print the path in the format s->n1->n2->destination
-         *if the path exists, else catch the Error and 
+         *if the path exists, else catch the Error and
          *prints it
          */
         try {
@@ -106,5 +152,5 @@ public class BellmanFord{
             System.out.println(e);
         }
 
-   } 
+   }
 }
