@@ -48,68 +48,78 @@ public class FordFulkerson {
 		int maxFlow = 0;
 
 				/* YOUR CODE GOES HERE */
-		/**
-		 * the residual graph will be the same
-		 * as the original graph at the beginning
-		 * and it will have backward edges with
-		 * weights zero for all its original corresponding edges
-		 */
-		WGraph residualGraph = new WGraph(graph);
-
-		for(Edge e: graph.getEdges()) {
-			Edge backwardEdge = new Edge(e.nodes[1], e.nodes[0], 0);
-			residualGraph.addEdge(backwardEdge);
-		}
-
-		ArrayList<Integer> stPath = pathDFS(source, destination, new WGraph(residualGraph));
-		while(!stPath.isEmpty()) {
+		try{
 			/**
-			 * find the bottleneck
-			 * along the s-t path
+			 * the residual graph will be the same
+			 * as the original graph at the beginning
+			 * and it will have backward edges with
+			 * weights zero for all its original corresponding edges
 			 */
-			Integer bottleneck = Integer.MAX_VALUE;
-			for(int i = 0; i < stPath.size()-1; i++) {
-				int startNode = stPath.get(i);
-				int endNode = stPath.get(i+1);
-				int pathEdgeCap = residualGraph.getEdge(startNode, endNode).weight;
-				if(pathEdgeCap < bottleneck) {
-					bottleneck = pathEdgeCap;
+			WGraph residualGraph = new WGraph(graph);
+
+			for(Edge e: graph.getEdges()) {
+				Edge backwardEdge = new Edge(e.nodes[1], e.nodes[0], 0);
+				residualGraph.addEdge(backwardEdge);
+			}
+
+			ArrayList<Integer> stPath = pathDFS(source, destination, new WGraph(residualGraph));
+			while(!stPath.isEmpty()) {
+				/**
+				 * find the bottleneck
+				 * along the s-t path
+				 */
+				Integer bottleneck = Integer.MAX_VALUE;
+				for(int i = 0; i < stPath.size()-1; i++) {
+					int startNode = stPath.get(i);
+					int endNode = stPath.get(i+1);
+					int pathEdgeCap = residualGraph.getEdge(startNode, endNode).weight;
+					if(pathEdgeCap < bottleneck) {
+						bottleneck = pathEdgeCap;
+					}
 				}
+
+				/**
+				 * update the maxFlow value
+				 * by the bottleneck
+				 */
+				maxFlow += bottleneck;
+
+				/**
+				 * augment the s-t path and update
+				 * the residual graph based on the new flow
+				 */
+				for(int i = 0; i < stPath.size()-1; i++) {
+					int startNode = stPath.get(i);
+					int endNode = stPath.get(i+1);
+					residualGraph.setEdge(startNode, endNode,
+						residualGraph.getEdge(startNode, endNode).weight - bottleneck);
+					residualGraph.setEdge(endNode, startNode,
+						residualGraph.getEdge(endNode, startNode).weight + bottleneck);
+				}
+
+				stPath = pathDFS(source, destination, new WGraph(residualGraph));
 			}
 
-			System.out.println("Bottleneck: " + bottleneck + "\n");
-
 			/**
-			 * update the maxFlow value
-			 * by the bottleneck
+			 * update the original graph
+			 * with the final flow values
 			 */
-			maxFlow += bottleneck;
-
-			/**
-			 * augment the s-t path and update
-			 * the residual graph based on the new flow
-			 */
-			for(int i = 0; i < stPath.size()-1; i++) {
-				int startNode = stPath.get(i);
-				int endNode = stPath.get(i+1);
-				residualGraph.setEdge(startNode, endNode,
-					residualGraph.getEdge(startNode, endNode).weight - bottleneck);
-				residualGraph.setEdge(endNode, startNode,
-					residualGraph.getEdge(endNode, startNode).weight + bottleneck);
+			for(Edge originalEdge: graph.getEdges()) {
+				int startNode = originalEdge.nodes[0];
+				int endNode = originalEdge.nodes[1];
+				/**
+				 * the backward edges store the flow
+				 * through the network. so we assign
+				 * their values to the original edges
+				 * from the graph.
+				 */
+				int residualEdgeWeight = residualGraph.getEdge(endNode, startNode).weight;
+				graph.setEdge(startNode, endNode, residualEdgeWeight);
 			}
-
-			stPath = pathDFS(source, destination, new WGraph(residualGraph));
 		}
 
-		/**
-		 * update the original graph
-		 * with the final flow values
-		 */
-		for(Edge originalEdge: graph.getEdges()) {
-			int startNode = originalEdge.nodes[0];
-			int endNode = originalEdge.nodes[1];
-			int residualEdgeWeight = residualGraph.getEdge(endNode, startNode).weight;
-			graph.setEdge(startNode, endNode, residualEdgeWeight);
+		catch(Exception e) {
+			maxFlow = -1;
 		}
 
 		answer += maxFlow + "\n" + graph.toString();
