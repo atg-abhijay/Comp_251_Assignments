@@ -17,10 +17,31 @@ public class FordFulkerson {
 		}
 
 		for(Edge e: graph.getEdges()) {
+			/**
+			 * if an edge has been used to reach
+			 * a node previously, its weight was
+			 * turned to -1 and so we are not
+			 * allowed to traverse it again.
+			 */
 			if(e.nodes[0] == source && e.weight < 0) {
 				continue;
 			}
 
+			/**
+			 * edges with positive weights have not been
+			 * tried out yet and are valid to traverse over.
+			 * since we cannot have a boolean[] visited
+			 * implementation for the vertices here (since the parameters
+			 * of pathDFS() are the source, destination and the graph, we
+			 * cannot pass a boolean array that would help us
+			 * keep track of the nodes that have been visited), instead
+			 * we change the weights of all incoming edges
+			 * into a node x to -1 so that we may not traverse
+			 * over them again. also, since we have a residual
+			 * graph with backward edges, we ONLY change the
+			 * weight of the edge u--->x (used to arrive at
+			 * x just now) to -1 so that we may not traverse it again.
+			 */
 			else if(e.nodes[0] == source && e.weight > 0) {
 				for(Edge h: graph.getEdges()) {
 					if(h.nodes[1] == e.nodes[1]) {
@@ -29,6 +50,13 @@ public class FordFulkerson {
 				}
 				graph.setEdge(e.nodes[1], e.nodes[0], -1);
 
+				/**
+				 * if the returned path is empty, then that
+				 * means that using the path that lies ahead,
+				 * we cannot reach the destination node. so,
+				 * we disregard the obtained path that lies
+				 * ahead and search for another path.
+				 */
 				ArrayList<Integer> pathAhead = pathDFS(e.nodes[1], destination, graph);
 				if(!pathAhead.isEmpty()) {
 					Stack.add(source);
@@ -62,6 +90,14 @@ public class FordFulkerson {
 				residualGraph.addEdge(backwardEdge);
 			}
 
+			/**
+			 * we pass a copy of the residual graph for finding
+			 * the DFS path from the source to the destination
+			 * since pathDFS() modifies the weights of the edges
+			 * and we don't want it to affect the residual graph
+			 * we are using here. so, we call pathDFS() with a
+			 * copy of the residual graph.
+			 */
 			ArrayList<Integer> stPath = pathDFS(source, destination, new WGraph(residualGraph));
 			while(!stPath.isEmpty()) {
 				/**
