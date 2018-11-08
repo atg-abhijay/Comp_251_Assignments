@@ -27,6 +27,7 @@ public class FordFulkerson {
 						graph.setEdge(h.nodes[0], e.nodes[1], -1);
 					}
 				}
+				graph.setEdge(e.nodes[1], e.nodes[0], -1);
 
 				ArrayList<Integer> pathAhead = pathDFS(e.nodes[1], destination, graph);
 				if(!pathAhead.isEmpty()) {
@@ -63,9 +64,9 @@ public class FordFulkerson {
 		ArrayList<Integer> stPath = pathDFS(source, destination, new WGraph(residualGraph));
 		int count = 1;
 		while(!stPath.isEmpty()) {
-			System.out.println("Count: " + count);
+			// System.out.println("Count: " + count);
 			count += 1;
-			stPath.forEach(node->System.out.println(node + " "));
+			stPath.forEach(node->System.out.print(node + " "));
 			System.out.println();
 			/**
 			 * find the bottleneck
@@ -75,15 +76,28 @@ public class FordFulkerson {
 			for(int i = 0; i < stPath.size()-1; i++) {
 				int startNode = stPath.get(i);
 				int endNode = stPath.get(i+1);
-				Edge capacityEdge = graph.getEdge(startNode, endNode);
-				Edge flowEdge = residualGraph.getEdge(endNode, startNode);
-				int forwardEdgeFlow = capacityEdge.weight - flowEdge.weight;
-				if(forwardEdgeFlow < bottleneck) {
-					bottleneck = forwardEdgeFlow;
+				// Edge pathEdge = graph.getEdge(startNode, endNode);
+				// int pathEdgeCap = 0;
+				int pathEdgeCap = residualGraph.getEdge(startNode, endNode).weight;
+				// if(pathEdge != null) {
+				// 	// Edge capacityEdge = graph.getEdge(startNode, endNode);
+				// 	// Edge flowEdge = residualGraph.getEdge(endNode, startNode);
+				// 	// pathEdgeCap = capacityEdge.weight - flowEdge.weight;
+				// 	pathEdgeCap = residualGraph.getEdge(startNode, endNode).weight;
+				// }
+				// else {
+				// 	// Edge capacityEdge = graph.getEdge(endNode, startNode);
+				// 	// Edge flowEdge = residualGraph.getEdge(startNode, endNode);
+				// 	// pathEdgeCap = capacityEdge.weight - flowEdge.weight;
+				// 	pathEdgeCap = residualGraph.getEdge(endNode, startNode).weight;
+				// }
+
+				if(pathEdgeCap < bottleneck) {
+					bottleneck = pathEdgeCap;
 				}
 			}
 
-			System.out.println("Bottleneck: " + bottleneck);
+			System.out.println("Bottleneck: " + bottleneck + "\n");
 
 			/**
 			 * update the maxFlow value
@@ -98,21 +112,26 @@ public class FordFulkerson {
 			for(int i = 0; i < stPath.size()-1; i++) {
 				int startNode = stPath.get(i);
 				int endNode = stPath.get(i+1);
-				Edge pathEdge = graph.getEdge(startNode, endNode);
-				/**
-				 * forward edge
-				 */
-				if(pathEdge != null) {
-					residualGraph.setEdge(startNode, endNode,
-						residualGraph.getEdge(startNode, endNode).weight - bottleneck);
-				}
+				// Edge pathEdge = graph.getEdge(startNode, endNode);
+
+				// /**
+				//  * forward edge
+				//  */
+				// if(pathEdge != null) {
+				residualGraph.setEdge(startNode, endNode,
+					residualGraph.getEdge(startNode, endNode).weight - bottleneck);
+				residualGraph.setEdge(endNode, startNode,
+					residualGraph.getEdge(endNode, startNode).weight + bottleneck);
+				// }
 				/**
 				 * backward edge
 				 */
-				else {
-					residualGraph.setEdge(endNode, startNode,
-						residualGraph.getEdge(endNode, startNode).weight + bottleneck);
-				}
+				// else {
+				// 	residualGraph.setEdge(endNode, startNode,
+				// 		residualGraph.getEdge(endNode, startNode).weight - bottleneck);
+				// 	residualGraph.setEdge(startNode, endNode,
+				// 		residualGraph.getEdge(startNode, endNode).weight + bottleneck);
+				// }
 			}
 
 			stPath = pathDFS(source, destination, new WGraph(residualGraph));
@@ -125,7 +144,7 @@ public class FordFulkerson {
 		for(Edge originalEdge: graph.getEdges()) {
 			int startNode = originalEdge.nodes[0];
 			int endNode = originalEdge.nodes[1];
-			int residualEdgeWeight = residualGraph.getEdge(startNode, endNode).weight;
+			int residualEdgeWeight = residualGraph.getEdge(endNode, startNode).weight;
 			graph.setEdge(startNode, endNode, residualEdgeWeight);
 		}
 
