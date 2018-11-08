@@ -80,12 +80,26 @@ public class BellmanFord{
         }
         this.distances[source] = 0;
 
+        /**
+         * relax the edges for (graphNumNodes-1)
+         * number of iterations
+         */
         for(int i = 1; i < graphNumNodes; i++) {
             for(Edge e: g.getEdges()) {
                 this.relaxEdge(e);
             }
         }
 
+        /**
+         * after relaxing the edges over
+         * (graphNumNodes-1) iterations,
+         * check if it is still possible
+         * to relax an edge. if we can still
+         * relax an edge, that means that
+         * there is a negative-weight cycle
+         * present in the graph. so, we throw
+         * an exception for it.
+         */
         for(Edge e: g.getEdges()) {
             int startVertex = e.nodes[0];
             int endVertex = e.nodes[1];
@@ -97,6 +111,9 @@ public class BellmanFord{
 
     }
 
+    /**
+     * private method to relax an edge e
+     */
     private void relaxEdge(Edge e) {
         int startVertex = e.nodes[0];
         int endVertex = e.nodes[1];
