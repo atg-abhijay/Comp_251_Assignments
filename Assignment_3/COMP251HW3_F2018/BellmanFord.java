@@ -82,6 +82,25 @@ public class BellmanFord{
         }
         this.distances[this.source] = 0;
 
+        // PriorityQueue<ArrayList<Integer>> pq = new PriorityQueue<ArrayList<Integer>>(new Comparator<ArrayList<Integer>>() {
+        //     @Override
+        //     public int compare(ArrayList<Integer> a1, ArrayList<Integer> a2) {
+        //         return Integer.compare(a1.get(1), a2.get(1));
+        //     }
+        // });
+
+        // for(int i = 0; i < graphNumNodes; i++) {
+        //     ArrayList<Integer> nodeDistancePair = new ArrayList<Integer>();
+        //     nodeDistancePair.add(i);
+        //     nodeDistancePair.add(this.distances[i]);
+        //     pq.add(nodeDistancePair);
+        // }
+
+        // for(int i = 1; i < graphNumNodes; i++) {
+
+        // }
+
+
         /**
          * relax the edges for (graphNumNodes-1)
          * number of iterations
@@ -139,16 +158,17 @@ public class BellmanFord{
         path.push(destination);
         boolean stop = false;
         while(!stop) {
-            nodeToVisit = predecessors[nodeToVisit];
-            if(predecessors[nodeToVisit] == -1) {
-                stop = True;
+            nodeToVisit = this.predecessors[nodeToVisit];
+            if(this.predecessors[nodeToVisit] == -1) {
+                stop = true;
             }
             path.push(nodeToVisit);
         }
 
         int[] pathToReturn = new int[path.size()];
         if(path.peek() == this.source) {
-            for(int i = 0; i < path.size(); i++) {
+            int pathSize = path.size();
+            for(int i = 0; i < pathSize; i++) {
                 pathToReturn[i] = path.pop();
             }
         }
@@ -157,7 +177,16 @@ public class BellmanFord{
             throw new PathDoesNotExistException("There is no path between the source and destination!");
         }
 
+        printArray(this.distances, "Distance");
+        printArray(this.predecessors, "Predecessors");
         return pathToReturn;
+    }
+
+    private static void printArray(int[] arr, String keyword) {
+        for(int i = 0; i < arr.length; i++) {
+            System.out.println(keyword + " " + i + ": " +  arr[i]);
+        }
+        System.out.println();
     }
 
     public void printPath(int destination){
@@ -184,7 +213,7 @@ public class BellmanFord{
 
     public static void main(String[] args){
 
-        String file = args[0];
+        String file = "bf2.txt";
         WGraph g = new WGraph(file);
         try{
             BellmanFord bf = new BellmanFord(g, g.getSource());
