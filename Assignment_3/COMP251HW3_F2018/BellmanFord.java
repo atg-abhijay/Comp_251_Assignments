@@ -135,10 +135,23 @@ public class BellmanFord{
 
         /* YOUR CODE GOES HERE (update the return statement as well!) */
 
+        /**
+         * if the destination is the same
+         * as the source, then the shortest
+         * path involves the destination only.
+         */
         if(destination == this.source) {
             return new int[] {destination};
         }
 
+        /**
+         * we will backtrack from the destination
+         * using the knowledge of the predecessors
+         * to get to the source (the source has no
+         * predecessor: denoted by -1). this will
+         * give us the path. use a Stack since the
+         * path obtained here will be in the reverse order.
+         */
         Stack<Integer> path = new Stack<Integer>();
         int nodeToVisit = destination;
         path.push(destination);
@@ -151,6 +164,21 @@ public class BellmanFord{
             path.push(nodeToVisit);
         }
 
+        /**
+         * the node at the top of the stack
+         * denotes the source s' of this
+         * SPECIFIC path. if it does not
+         * match the given source of the graph,
+         * then there is no path between the
+         * source of the graph and the destination.
+         *
+         * if the source of the path and the
+         * source of the graph match, then
+         * pop nodes off the Stack
+         * and insert them into an array.
+         * this will correct the order
+         * of the nodes along the path.
+         */
         int[] pathToReturn = new int[path.size()];
         if(path.peek() == this.source) {
             int pathSize = path.size();
