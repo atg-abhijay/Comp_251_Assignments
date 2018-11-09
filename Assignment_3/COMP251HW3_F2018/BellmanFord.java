@@ -82,34 +82,13 @@ public class BellmanFord{
         }
         this.distances[this.source] = 0;
 
-        // PriorityQueue<ArrayList<Integer>> pq = new PriorityQueue<ArrayList<Integer>>(new Comparator<ArrayList<Integer>>() {
-        //     @Override
-        //     public int compare(ArrayList<Integer> a1, ArrayList<Integer> a2) {
-        //         return Integer.compare(a1.get(1), a2.get(1));
-        //     }
-        // });
-
-        // for(int i = 0; i < graphNumNodes; i++) {
-        //     ArrayList<Integer> nodeDistancePair = new ArrayList<Integer>();
-        //     nodeDistancePair.add(i);
-        //     nodeDistancePair.add(this.distances[i]);
-        //     pq.add(nodeDistancePair);
-        // }
-
-        // for(int i = 1; i < graphNumNodes; i++) {
-
-        // }
-
-
         /**
          * relax the edges for (graphNumNodes-1)
          * number of iterations
          */
 
         for(int i = 1; i < graphNumNodes; i++) {
-            // System.out.println("Relaxing edges: " + i + "th iteration:");
             for(Edge e: g.getEdges()) {
-                // System.out.println(e.nodes[0] + " " + e.nodes[1] + " - " + e.weight);
                 this.relaxEdge(e);
             }
         }
@@ -143,9 +122,6 @@ public class BellmanFord{
         int endVertex = e.nodes[1];
         if(this.distances[endVertex] > this.distances[startVertex] + e.weight) {
             this.distances[endVertex] = this.distances[startVertex] + e.weight;
-            // System.out.println("Distance changed: " + startVertex + ", " + endVertex + ": " + this.distances[endVertex]);
-            // printArray(this.distances, "Distances");
-            // System.out.println();
             this.predecessors[endVertex] = startVertex;
         }
     }
@@ -187,17 +163,9 @@ public class BellmanFord{
             throw new PathDoesNotExistException("There is no path between the source and destination!");
         }
 
-        // printArray(this.distances, "Distance");
-        // printArray(this.predecessors, "Predecessors");
         return pathToReturn;
     }
 
-    private static void printArray(int[] arr, String keyword) {
-        for(int i = 0; i < arr.length; i++) {
-            // System.out.println(keyword + " " + i + ": " +  arr[i]);
-        }
-        // System.out.println();
-    }
 
     public void printPath(int destination){
         /*Print the path in the format s->n1->n2->destination
