@@ -70,7 +70,7 @@ public class BellmanFord{
          * distance of source from source is zero.
          * all predecessors are set to -1.
          */
-        final int largeValue = Integer.MAX_VALUE;
+        final int largeValue = (int) Math.pow(10, 9);
         int graphNumNodes = g.getNbNodes();
         this.distances = new int[graphNumNodes];
         this.predecessors = new int[graphNumNodes];
@@ -105,8 +105,11 @@ public class BellmanFord{
          * relax the edges for (graphNumNodes-1)
          * number of iterations
          */
+
         for(int i = 1; i < graphNumNodes; i++) {
+            // System.out.println("Relaxing edges: " + i + "th iteration:");
             for(Edge e: g.getEdges()) {
+                // System.out.println(e.nodes[0] + " " + e.nodes[1] + " - " + e.weight);
                 this.relaxEdge(e);
             }
         }
@@ -140,6 +143,9 @@ public class BellmanFord{
         int endVertex = e.nodes[1];
         if(this.distances[endVertex] > this.distances[startVertex] + e.weight) {
             this.distances[endVertex] = this.distances[startVertex] + e.weight;
+            // System.out.println("Distance changed: " + startVertex + ", " + endVertex + ": " + this.distances[endVertex]);
+            // printArray(this.distances, "Distances");
+            // System.out.println();
             this.predecessors[endVertex] = startVertex;
         }
     }
@@ -153,13 +159,17 @@ public class BellmanFord{
 
         /* YOUR CODE GOES HERE (update the return statement as well!) */
 
+        if(destination == this.source) {
+            return new int[] {destination};
+        }
+
         Stack<Integer> path = new Stack<Integer>();
         int nodeToVisit = destination;
         path.push(destination);
         boolean stop = false;
         while(!stop) {
             nodeToVisit = this.predecessors[nodeToVisit];
-            if(this.predecessors[nodeToVisit] == -1) {
+            if(nodeToVisit == -1 || this.predecessors[nodeToVisit] == -1) {
                 stop = true;
             }
             path.push(nodeToVisit);
@@ -177,16 +187,16 @@ public class BellmanFord{
             throw new PathDoesNotExistException("There is no path between the source and destination!");
         }
 
-        printArray(this.distances, "Distance");
-        printArray(this.predecessors, "Predecessors");
+        // printArray(this.distances, "Distance");
+        // printArray(this.predecessors, "Predecessors");
         return pathToReturn;
     }
 
     private static void printArray(int[] arr, String keyword) {
         for(int i = 0; i < arr.length; i++) {
-            System.out.println(keyword + " " + i + ": " +  arr[i]);
+            // System.out.println(keyword + " " + i + ": " +  arr[i]);
         }
-        System.out.println();
+        // System.out.println();
     }
 
     public void printPath(int destination){
@@ -213,7 +223,7 @@ public class BellmanFord{
 
     public static void main(String[] args){
 
-        String file = "bf2.txt";
+        String file = args[0];
         WGraph g = new WGraph(file);
         try{
             BellmanFord bf = new BellmanFord(g, g.getSource());
