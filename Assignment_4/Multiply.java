@@ -12,6 +12,9 @@ public class Multiply{
     public static int[] naive(int size, int x, int y) {
 
         // YOUR CODE GOES HERE  (Note: Change return statement)
+        /**
+         * Grade-school algorithm
+         */
         if(size == 1) {
             return new int[] {x*y, 1};
         }
@@ -31,8 +34,28 @@ public class Multiply{
     public static int[] karatsuba(int size, int x, int y) {
 
         // YOUR CODE GOES HERE  (Note: Change return statement)
+        if(size == 1) {
+            return new int[] {x*y, 1};
+        }
 
-        return null;
+        int m = (size >> 1) + (size & 1);
+        int a = x >> m;
+        int b = x & ((1 << m) - 1);
+
+        int c = y >> m;
+        int d = y & ((1 << m) - 1);
+
+        int[] acMult = karatsuba(m, a, c);
+        int e = acMult[0];
+        int[] bdMult = karatsuba(m, b, d);
+        int f = bdMult[0];
+        int[] abcdMult = karatsuba(m, a-b, c-d);
+        int g = abcdMult[0];
+
+        int[] result = new int[2];
+        result[0] = (e << (2*m)) + ((e + f - g) << m) + f;
+
+        return result;
 
     }
 
