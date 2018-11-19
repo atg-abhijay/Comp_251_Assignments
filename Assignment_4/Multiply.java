@@ -37,6 +37,7 @@ public class Multiply{
         if(size == 1) {
             return new int[] {x*y, 1};
         }
+        int[] result = new int[2];
 
         int m = (size >> 1) + (size & 1);
         int a = x >> m;
@@ -47,13 +48,16 @@ public class Multiply{
 
         int[] acMult = karatsuba(m, a, c);
         int e = acMult[0];
+        result[1] += acMult[1];
         int[] bdMult = karatsuba(m, b, d);
         int f = bdMult[0];
+        result[1] += bdMult[1];
         int[] abcdMult = karatsuba(m, a-b, c-d);
         int g = abcdMult[0];
+        result[1] += abcdMult[1];
 
-        int[] result = new int[2];
         result[0] = (e << (2*m)) + ((e + f - g) << m) + f;
+        result[1] += 6*size;
 
         return result;
 
