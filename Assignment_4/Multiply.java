@@ -13,14 +13,16 @@ public class Multiply{
 
         // YOUR CODE GOES HERE  (Note: Change return statement)
         if(size == 1) {
-            return new int[] {x*y, -1};
+            return new int[] {x*y, 1};
         }
 
         int ySmallestPlace = y % 2;
-        int[] result = new int[] {0, -1};
+        int[] result = new int[2];
         result[0] = x * ySmallestPlace;
+        result[1] = 3*size;
         int[] recursiveResult = naive(size-1, x, y>>1);
         result[0] += (recursiveResult[0] << 1);
+        result[1] += recursiveResult[1];
 
         return result;
 
