@@ -15,17 +15,20 @@ public class Multiply{
         /**
          * Grade-school algorithm
          */
-        if(size == 1) {
-            return new int[] {x*y, 1};
+        int xLength = Integer.toBinaryString(x).length();
+        int yLength = Integer.toBinaryString(y).length();
+        if(yLength == 1) {
+            return new int[] {x*y, xLength};
         }
 
-        int ySmallestPlace = y % 2;
+        int ySmallestPlace = y & 1;
         int[] result = new int[2];
         result[0] = x * ySmallestPlace;
-        result[1] = 3*size;
-        int[] recursiveResult = naive(size-1, x, y>>1);
-        result[0] += (recursiveResult[0] << 1);
-        result[1] += recursiveResult[1];
+        result[1] = xLength;
+        int[] recursiveResult = naive(size, x, y>>1);
+        int toAdd = recursiveResult[0] << 1;
+        result[0] += toAdd;
+        result[1] += recursiveResult[1] + Integer.toBinaryString(toAdd).length();
 
         return result;
 
