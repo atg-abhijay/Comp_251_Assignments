@@ -12,26 +12,38 @@ public class Multiply{
     public static int[] naive(int size, int x, int y) {
 
         // YOUR CODE GOES HERE  (Note: Change return statement)
-        /**
-         * Grade-school algorithm
-         */
-        int xLength = Integer.toBinaryString(x).length();
-        int yLength = Integer.toBinaryString(y).length();
-        if(yLength == 1) {
-            return new int[] {x*y, xLength};
+        if(size == 1) {
+            return new int[] {x*y, 1};
         }
-
-        int ySmallestPlace = y & 1;
         int[] result = new int[2];
-        result[0] = x * ySmallestPlace;
-        result[1] = xLength;
-        int[] recursiveResult = naive(size, x, y>>1);
-        int toAdd = recursiveResult[0] << 1;
-        result[0] += toAdd;
-        result[1] += recursiveResult[1] + Integer.toBinaryString(toAdd).length();
+
+        int m = (size >> 1) + (size & 1);
+        int a = x >> m;
+        int b = x & ((1 << m) - 1);
+
+        int c = y >> m;
+        int d = y & ((1 << m) - 1);
+
+        int[] acMult = naive(m, a, c);
+        int e = acMult[0];
+        result[1] += acMult[1];
+
+        int[] bdMult = naive(m, b, d);
+        int f = bdMult[0];
+        result[1] += bdMult[1];
+
+        int[] bcMult = naive(m, b, c);
+        int g = bcMult[0];
+        result[1] += bcMult[1];
+
+        int[] adMult = naive(m, a, d);
+        int h = adMult[0];
+        result[1] += adMult[1];
+
+        result[0] = (e << (2*m)) + ((g + h) << m) + f;
+        result[1] += 3*m;
 
         return result;
-
     }
 
     public static int[] karatsuba(int size, int x, int y) {
@@ -60,7 +72,7 @@ public class Multiply{
         result[1] += abcdMult[1];
 
         result[0] = (e << (2*m)) + ((e + f - g) << m) + f;
-        result[1] += 6*size;
+        result[1] += 6*m;
 
         return result;
 
