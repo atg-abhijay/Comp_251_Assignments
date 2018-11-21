@@ -64,9 +64,11 @@ public class Multiply{
         int[] acMult = karatsuba(m, a, c);
         int e = acMult[0];
         result[1] += acMult[1];
+
         int[] bdMult = karatsuba(m, b, d);
         int f = bdMult[0];
         result[1] += bdMult[1];
+
         int[] abcdMult = karatsuba(m, a-b, c-d);
         int g = abcdMult[0];
         result[1] += abcdMult[1];
