@@ -17,6 +17,22 @@ public class Multiply{
         }
         int[] result = new int[2];
 
+        /**
+         * can achieve -
+         * 1. floor upon division by 2
+         * 2. ceiling upon division by 2
+         * 3. x mod (2^p), for some p
+         * by using bit shifting as demonstrated
+         * below for m,a,b,c,d
+         */
+        /**
+         * right bit shift corresponds
+         * to taking the floor upon
+         * division by 2. if we want
+         * to take ceiling upon division
+         * by 2, we must add the last
+         * bit of 'size' to the floor value
+         */
         int m = (size >> 1) + (size & 1);
         int a = x >> m;
         int b = x & ((1 << m) - 1);
@@ -24,6 +40,11 @@ public class Multiply{
         int c = y >> m;
         int d = y & ((1 << m) - 1);
 
+        /**
+         * doing the multiplications and
+         * updating the number of operations
+         * perfomed by the recursive call as well
+         */
         int[] acMult = naive(m, a, c);
         int e = acMult[0];
         result[1] += acMult[1];
@@ -41,6 +62,10 @@ public class Multiply{
         result[1] += adMult[1];
 
         result[0] = (e << (2*m)) + ((g + h) << m) + f;
+        /**
+         * 3 arithmetic operations on numbers
+         * of size m performed in calculating result[0] above
+         */
         result[1] += 3*m;
 
         return result;
@@ -54,6 +79,9 @@ public class Multiply{
         }
         int[] result = new int[2];
 
+        /**
+         * same idea as for the naive multiplication
+         */
         int m = (size >> 1) + (size & 1);
         int a = x >> m;
         int b = x & ((1 << m) - 1);
@@ -74,6 +102,11 @@ public class Multiply{
         result[1] += abcdMult[1];
 
         result[0] = (e << (2*m)) + ((e + f - g) << m) + f;
+        /**
+         * we recurse less number of times here but
+         * 6 arithmetic operations on numbers of size
+         * m performed here to calculate result[0] above
+         */
         result[1] += 6*m;
 
         return result;
