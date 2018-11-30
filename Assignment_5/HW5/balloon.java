@@ -1,11 +1,12 @@
-import java.io.File;
+import java.io.*;
 import java.util.Scanner;
-import java.util.LinkedList;
 
 public class balloon {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException{
+        long startTime = System.currentTimeMillis();
         final int largeValue = (int) Math.pow(10, 8);
-        File inputFile = new File("HW5/testBalloons.txt"); //
+        File inputFile = new File("testBalloons.txt");
+        BufferedWriter writer = new BufferedWriter(new FileWriter("1.txt"));
         Scanner sc = null;
         try{
             sc = new Scanner(inputFile);
@@ -17,7 +18,7 @@ public class balloon {
 
         int numProblems = sc.nextInt();
         int[] problemSizes = new int[numProblems];
-        int[] numArrowsReq = new int[numProblems];
+        // int[] numArrowsReq = new int[numProblems];
 
         /**
          * reading in the
@@ -74,8 +75,18 @@ public class balloon {
                     firstJump = false;
                 }
             }
-            numArrowsReq[i] = numArrows;
-            System.out.println(numArrows);
+            // numArrowsReq[i] = numArrows;
+            if(i != problemSizes.length-1) {
+                writer.append(numArrows + "\n");
+            }
+            else{
+                writer.append(numArrows + "");
+            }
+
         }
+        sc.close();
+        writer.close();
+        long endTime = System.currentTimeMillis();
+        System.out.println("Runtime: " + (endTime-startTime));
     }
 }
