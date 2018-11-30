@@ -4,9 +4,13 @@ import java.util.Scanner;
 public class balloon {
     public static void main(String[] args) throws IOException{
         long startTime = System.currentTimeMillis();
+        /**
+         * use large arbitrary value for
+         * heights of balloons that are popped
+         */
         final int largeValue = (int) Math.pow(10, 8);
         File inputFile = new File("testBalloons.txt");
-        BufferedWriter writer = new BufferedWriter(new FileWriter("1.txt"));
+        BufferedWriter writer = new BufferedWriter(new FileWriter("1.txt")); //TODO: have to change output file name
         Scanner sc = null;
         try{
             sc = new Scanner(inputFile);
@@ -18,8 +22,6 @@ public class balloon {
 
         int numProblems = sc.nextInt();
         int[] problemSizes = new int[numProblems];
-        // int[] numArrowsReq = new int[numProblems];
-
         /**
          * reading in the
          * different problem sizes
@@ -30,52 +32,87 @@ public class balloon {
 
         for(int i = 0; i < problemSizes.length; i++) {
             int problemSize = problemSizes[i];
-            int[] balloonPositions = new int[problemSize];
-            // System.out.println(problemSize);
+            int[] balloonHeights = new int[problemSize];
             /**
-             * reading in the balloon
-             * positions for a specific problem
+             * reading in the heights for the
+             * balloons specific to this problem
              */
             for(int j = 0; j < problemSize; j++) {
-                balloonPositions[j] = sc.nextInt();
-                // System.out.print(balloonPositions[j] + " ");
+                balloonHeights[j] = sc.nextInt();
             }
 
-            int currentArrowHeight = balloonPositions[0]-1;
-            balloonPositions[0] = largeValue;
-            int numBalloonsShot = 1;
+            /**
+             * consider the first balloon already and
+             * change the arrow height, number of balloons
+             * popped etc.
+             */
+            int currentArrowHeight = balloonHeights[0]-1;
+            balloonHeights[0] = largeValue;
+            int numBalloonsPopped = 1;
             int index = 1;
+            int numArrows = 0;
+            /**
+             * these two will keep track of the first time
+             * we encounter a balloon that is at the same
+             * height or above along our downward journey
+             */
             boolean firstJump = false;
             int startIdxNextIter = -1;
-            int numArrows = 0;
-            while(numBalloonsShot < problemSize) {
-                if(currentArrowHeight == balloonPositions[index]) {
-                    balloonPositions[index] = largeValue;
-                    numBalloonsShot++;
+            /**
+             * keep iterating until all
+             * the balloons have been popped
+             */
+            while(numBalloonsPopped < problemSize) {
+                if(currentArrowHeight == balloonHeights[index]) {
+                    balloonHeights[index] = largeValue;
+                    numBalloonsPopped++;
                     currentArrowHeight--;
                 }
 
                 else{
-                    if(!firstJump && balloonPositions[index] != largeValue) {
+                    /**
+                     * three conditions come into play here -
+                     * 1. arrow height != balloon height
+                     * 2. we have not made the first jump yet
+                     * 3. the balloon height is not the arbitrary large value
+                     *
+                     * we set firstJump to true since we have found
+                     * the new start index for the iteration that will follow this one
+                     * (saves us time since we do not have to iterate from the
+                     * beginning once again)
+                     */
+                    if(!firstJump && balloonHeights[index] != largeValue) {
                         startIdxNextIter = index;
                         firstJump = true;
                     }
                 }
                 index++;
 
-                if(numBalloonsShot == problemSize) {
+                if(numBalloonsPopped == problemSize) {
                     numArrows++;
                     break;
                 }
 
+                /**
+                 * when we have reached the end of the list
+                 * or the arrow has dropped to height 0 then,
+                 * we update #arrows used, set the index value
+                 * for the next iteration, make the arrow
+                 * height equal to that of the balloon at that index
+                 * and reset firstJump so that we can locate the new
+                 * start index later on
+                 */
                 if(index == problemSize || currentArrowHeight == 0) {
                     numArrows++;
                     index = startIdxNextIter;
-                    currentArrowHeight = balloonPositions[index];
+                    currentArrowHeight = balloonHeights[index];
                     firstJump = false;
                 }
             }
-            // numArrowsReq[i] = numArrows;
+
+            /**
+             * writing to the output file
+             */
             if(i != problemSizes.length-1) {
                 writer.append(numArrows + "\n");
             }
