@@ -14,10 +14,10 @@ class Node {
 }
 
 public class islands {
-    // final int largeValue = (int) Math.pow(10, 8);
     public static void main(String[] args) throws IOException{
+        long startTime = System.currentTimeMillis();
         File inputFile = new File("testIslands.txt");
-        // BufferedWriter writer = new BufferedWriter(new FileWriter("testIslands_solution.txt")); //TODO: have to change output file name
+        BufferedWriter writer = new BufferedWriter(new FileWriter("testIslands_solution.txt"));
         Scanner sc = null;
         try{
             sc = new Scanner(inputFile);
@@ -70,8 +70,22 @@ public class islands {
                     }
                 }
             }
-            System.out.println(numIslands);
+
+            /**
+             * writing to the output file
+             */
+            if(i != numProblems-1) {
+                writer.append(numIslands + "\n");
+            }
+            else{
+                writer.append(numIslands + "");
+            }
         }
+
+        sc.close();
+        writer.close();
+        long endTime = System.currentTimeMillis();
+        System.out.println("Runtime: " + (endTime-startTime));
     }
 
 
@@ -81,73 +95,29 @@ public class islands {
         Node below = ocean[row+1][column];
         Node toRight = ocean[row][column+1];
 
-        if(above.landOrWater == 1 && !above.visited) {
-            above.belongToIsland = original.belongToIsland;
-            above.visited = true;
+        if(evaluateNeighbor(original, above)) {
             markNeighbors(ocean, row-1, column, above);
         }
 
-        if(toLeft.landOrWater == 1 && !toLeft.visited) {
-            toLeft.belongToIsland = original.belongToIsland;
-            toLeft.visited = true;
+        if(evaluateNeighbor(original, toLeft)) {
             markNeighbors(ocean, row, column-1, toLeft);
         }
 
-        if(below.landOrWater == 1 && !below.visited) {
-            below.belongToIsland = original.belongToIsland;
-            below.visited = true;
+        if(evaluateNeighbor(original, below)) {
             markNeighbors(ocean, row+1, column, below);
         }
 
-        if(toRight.landOrWater == 1 && !toRight.visited) {
-            toRight.belongToIsland = original.belongToIsland;
-            toRight.visited = true;
+        if(evaluateNeighbor(original, toRight)) {
             markNeighbors(ocean, row, column+1, toRight);
         }
     }
 
-
-    public static int checkSurroundings(int[][][] ocean, int row, int column) {
-        int max = 1;
-        int islandNumber = 0;
-        if(ocean[row-1][column][0] == 1) {
-            islandNumber = ocean[row-1][column][1];
-            if(max < islandNumber) {
-                max = islandNumber;
-            }
+    public static boolean evaluateNeighbor(Node parent, Node neighbor) {
+        if(neighbor.landOrWater == 1 && !neighbor.visited) {
+            neighbor.belongToIsland = parent.belongToIsland;
+            neighbor.visited = true;
+            return true;
         }
-
-        if(ocean[row][column-1][0] == 1) {
-            islandNumber = ocean[row][column-1][1];
-            if(max < islandNumber) {
-                max = islandNumber;
-            }
-        }
-
-        if(ocean[row+1][column][0] == 1) {
-            islandNumber = ocean[row+1][column][1];
-            if(max < islandNumber) {
-                max = islandNumber;
-            }
-        }
-
-        if(ocean[row][column+1][0] == 1) {
-            islandNumber = ocean[row][column+1][1];
-            if(max < islandNumber) {
-                max = islandNumber;
-            }
-        }
-
-        return max;
-    }
-
-
-    public static void printArray(int[][][] arr) {
-        for(int i = 0; i < arr.length; i++) {
-            for(int j = 0; j < arr[0].length; j++) {
-                System.out.print(arr[i][j][0]);
-            }
-            System.out.println();
-        }
+        return false;
     }
 }
