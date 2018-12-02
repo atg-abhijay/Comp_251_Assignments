@@ -10,7 +10,7 @@ public class balloon {
          */
         final int largeValue = (int) Math.pow(10, 8);
         File inputFile = new File("testBalloons.txt");
-        BufferedWriter writer = new BufferedWriter(new FileWriter("1.txt")); //TODO: have to change output file name
+        BufferedWriter writer = new BufferedWriter(new FileWriter("testBalloons_solution.txt"));
         Scanner sc = null;
         try{
             sc = new Scanner(inputFile);
