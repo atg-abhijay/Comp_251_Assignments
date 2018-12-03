@@ -24,7 +24,7 @@ class Node {
 
 public class islands {
     public static void main(String[] args) throws IOException{
-        long startTime = System.currentTimeMillis();
+        // long startTime = System.currentTimeMillis();
         File inputFile = new File("testIslands.txt");
         BufferedWriter writer = new BufferedWriter(new FileWriter("testIslands_solution.txt"));
         Scanner sc = null;
@@ -118,8 +118,8 @@ public class islands {
 
         sc.close();
         writer.close();
-        long endTime = System.currentTimeMillis();
-        System.out.println("Runtime: " + (endTime-startTime));
+        // long endTime = System.currentTimeMillis();
+        // System.out.println("Runtime: " + (endTime-startTime));
     }
 
 

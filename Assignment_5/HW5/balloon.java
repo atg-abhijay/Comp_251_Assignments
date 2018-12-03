@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class balloon {
     public static void main(String[] args) throws IOException{
-        long startTime = System.currentTimeMillis();
+        // long startTime = System.currentTimeMillis();
         /**
          * use large arbitrary value for
          * heights of balloons that are popped
@@ -123,7 +123,7 @@ public class balloon {
         }
         sc.close();
         writer.close();
-        long endTime = System.currentTimeMillis();
-        System.out.println("Runtime: " + (endTime-startTime));
+        // long endTime = System.currentTimeMillis();
+        // System.out.println("Runtime: " + (endTime-startTime));
     }
 }
